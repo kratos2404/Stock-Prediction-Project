@@ -38,28 +38,30 @@ document.addEventListener("DOMContentLoaded", function () {
         errorMessage.innerText = "";
         loading.style.display = "block";  // Show loading animation
     
-        fetch("/predict", {
+        fetch("/predict", {  // <-- UPDATED API URL
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ ticker: ticker })
         })
         .then(response => response.json())
         .then(data => {
+            
             loading.style.display = "none";  // Hide loading animation
-    
+            
             if (data.error) {
                 errorMessage.innerText = data.error;
                 return;
             }
-    
+            
             // Update the Chart with new predictions
             predictionChart.data.datasets[0].data = data.predicted_prices;
             predictionChart.update();
         })
         .catch(error => {
             loading.style.display = "none";  // Hide loading animation
-            errorMessage.innerText = "Error fetching data. Try again.";
+            errorMessage.innerText = "Error fetching data. Check console.";
             console.error("Fetch error:", error);
         });
+        console.log("Fetching data for", ticker);
     }
 });
